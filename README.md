@@ -53,3 +53,6 @@ dotnet run --project .\src\Zentry.Api\Zentry.Api.csproj
 ## Nota honesta
 Este entorno no tiene `dotnet`, así que no pude compilarlo aquí. El proyecto sí fue generado ya
 alineado a MySQL y al script/base que compartiste.
+=======
+# Zentry_Back
+
