@@ -1,0 +1,2 @@
+namespace Zentry.Application.DTOs.Payments;
+public class CreatePaymentRequest { public Guid BranchId { get; set; } public Guid InvoiceId { get; set; } public Guid? AppointmentId { get; set; } public Guid CustomerId { get; set; } public Guid? CashSessionId { get; set; } public string Method { get; set; } = "CASH"; public string? ReferenceCode { get; set; } public decimal Amount { get; set; } public string? Notes { get; set; } public Guid? CreatedByUserId { get; set; } }
