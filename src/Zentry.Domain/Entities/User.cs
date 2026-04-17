@@ -1,4 +1,5 @@
 using Zentry.Domain.Common;
+using Zentry.Domain.Enums;
 
 namespace Zentry.Domain.Entities;
 
@@ -18,5 +19,7 @@ public class User : BaseEntity, ITenantEntity
     public bool IsSupervisor { get; set; }
 
     public Role? RoleEntity { get; set; }
+    // Agrega esta propiedad a la clase User para corregir el error CS1061
+    public UserRole Role { get; set; }
 
 }

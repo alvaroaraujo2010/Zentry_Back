@@ -109,7 +109,13 @@ public class ZentryDbContext : DbContext
             e.Property(x => x.IsSupervisor).HasColumnName("is_supervisor");
             e.Property(x => x.CreatedAt).HasColumnName("created_at");
             e.Property(x => x.UpdatedAt).HasColumnName("updated_at");
-            e.HasOne(x => x.RoleEntity).WithMany().HasForeignKey(x => x.RoleId).OnDelete(DeleteBehavior.SetNull);
+
+            e.Ignore(x => x.Role);
+
+            e.HasOne(x => x.RoleEntity)
+                .WithMany()
+                .HasForeignKey(x => x.RoleId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<UserBranch>(e =>

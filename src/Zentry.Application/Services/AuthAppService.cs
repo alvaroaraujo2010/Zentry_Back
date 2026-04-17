@@ -27,7 +27,7 @@ public class AuthAppService : IAuthAppService
         if (user is null || !_passwordHasher.Verify(request.Password, user.PasswordHash))
             return ApiResponse<AuthResponse>.Fail("Credenciales inválidas.");
 
-        var roleCode = await _users.GetRoleCodeAsync(user, cancellationToken);
+        var roleCode = user.RoleEntity?.Code ?? "OWNER";
 
         var currentRefresh = await _refreshTokens.GetActiveByUserAsync(user.Id, cancellationToken);
         if (currentRefresh is not null)
