@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddZentryInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Default")
-            ?? "server=localhost;port=3306;database=zentry;user=administrador;password=ingAlv4r0;";
+            ?? throw new InvalidOperationException("La cadena de conexion 'Default' es obligatoria.");
 
         services.AddDbContext<ZentryDbContext>(options =>
             options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
@@ -30,8 +30,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IMembershipAppService, MembershipAppService>();
         services.AddScoped<ICashAppService, CashAppService>();
         services.AddScoped<IReminderAppService, ReminderAppService>();
+        services.AddScoped<IDashboardAppService, DashboardAppService>();
 
         services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
@@ -39,6 +41,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICatalogServiceRepository, CatalogServiceRepository>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<IMembershipRepository, MembershipRepository>();
+        services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+        services.AddScoped<ICashSessionRepository, CashSessionRepository>();
+        services.AddScoped<IReminderRepository, ReminderRepository>();
 
         services.AddScoped<IAuthAppService, AuthAppService>();
         services.AddScoped<ICustomerAppService, CustomerAppService>();
@@ -50,7 +56,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStaffProfileAppService, StaffProfileAppService>();
 
         services.AddScoped<IBranchRepository, BranchRepository>();
-        services.AddScoped<ITenantRepository, TenantRepository>();
 
         services.AddScoped<IRoleAppService, RoleAppService>();
         services.AddScoped<IBranchAppService, BranchAppService>();

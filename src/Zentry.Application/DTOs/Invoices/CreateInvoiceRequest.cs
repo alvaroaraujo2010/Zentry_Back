@@ -1,2 +1,2 @@
 namespace Zentry.Application.DTOs.Invoices;
-public class CreateInvoiceRequest { public Guid TenantId { get; set; } public Guid BranchId { get; set; } public Guid CustomerId { get; set; } public decimal Total { get; set; } }
+public class CreateInvoiceRequest { public Guid TenantId { get; set; } public Guid BranchId { get; set; } public Guid? AppointmentId { get; set; } public Guid CustomerId { get; set; } public decimal? Subtotal { get; set; } public decimal? Tax { get; set; } public decimal? Discount { get; set; } public decimal Total { get; set; } public DateTime? DueAt { get; set; } public string? Notes { get; set; } }

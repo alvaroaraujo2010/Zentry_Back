@@ -1,2 +1,2 @@
 namespace Zentry.Application.DTOs.Payments;
-public class PaymentDto { public Guid Id { get; set; } public decimal Amount { get; set; } public string Method { get; set; } = string.Empty; public string Status { get; set; } = string.Empty; public DateTime ReceivedAt { get; set; } }
+public class PaymentDto { public Guid Id { get; set; } public Guid BranchId { get; set; } public Guid InvoiceId { get; set; } public Guid? AppointmentId { get; set; } public Guid CustomerId { get; set; } public decimal Amount { get; set; } public string Method { get; set; } = string.Empty; public string? ReferenceCode { get; set; } public string Status { get; set; } = string.Empty; public DateTime ReceivedAt { get; set; } public string? Notes { get; set; } }

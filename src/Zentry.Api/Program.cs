@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Zentry.Infrastructure.DependencyInjection;
@@ -12,18 +13,22 @@ builder.Services.AddZentryInfrastructure(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
+    var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? ["http://localhost:4200"];
     options.AddPolicy("Frontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:4200")
+            .WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
 });
 
-var jwtSecret = builder.Configuration["Jwt:AccessSecret"] ?? "zentry_mysql_super_secret_key_2026_32_chars_min";
-var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Zentry";
-var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Zentry.Client";
+var jwtSecret = builder.Configuration["Jwt:AccessSecret"]
+    ?? throw new InvalidOperationException("La configuracion Jwt:AccessSecret es obligatoria.");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
+    ?? throw new InvalidOperationException("La configuracion Jwt:Issuer es obligatoria.");
+var jwtAudience = builder.Configuration["Jwt:Audience"]
+    ?? throw new InvalidOperationException("La configuracion Jwt:Audience es obligatoria.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -43,7 +48,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -64,10 +74,16 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-// app.UseHttpsRedirection();  // <- comentar temporalmente en desarrollo
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("Frontend");
 

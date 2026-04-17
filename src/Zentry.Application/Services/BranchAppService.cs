@@ -81,4 +81,47 @@ public class BranchAppService : IBranchAppService
             IsActive = entity.IsActive
         }, "Sucursal creada");
     }
+
+    public async Task<ApiResponse<BranchDto>> UpdateAsync(Guid id, UpdateBranchRequest request, CancellationToken cancellationToken = default)
+    {
+        var entity = await _branches.GetByIdAsync(id, cancellationToken);
+        if (entity is null)
+            return ApiResponse<BranchDto>.Fail("Sucursal no encontrada.");
+
+        if (string.IsNullOrWhiteSpace(request.Code))
+            return ApiResponse<BranchDto>.Fail("El código es obligatorio.");
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return ApiResponse<BranchDto>.Fail("El nombre es obligatorio.");
+
+        var normalizedCode = request.Code.Trim().ToUpperInvariant();
+        var existing = await _branches.GetByCodeAsync(entity.TenantId, normalizedCode, cancellationToken);
+        if (existing is not null && existing.Id != entity.Id)
+            return ApiResponse<BranchDto>.Fail("Ya existe una sucursal con ese código.");
+
+        entity.Code = normalizedCode;
+        entity.Name = request.Name.Trim();
+        entity.Phone = string.IsNullOrWhiteSpace(request.Phone) ? null : request.Phone.Trim();
+        entity.Email = string.IsNullOrWhiteSpace(request.Email) ? null : request.Email.Trim();
+        entity.Address = string.IsNullOrWhiteSpace(request.Address) ? null : request.Address.Trim();
+        entity.City = string.IsNullOrWhiteSpace(request.City) ? null : request.City.Trim();
+        entity.State = string.IsNullOrWhiteSpace(request.State) ? null : request.State.Trim();
+        entity.UpdatedAt = DateTime.UtcNow;
+
+        await _branches.SaveChangesAsync(cancellationToken);
+
+        return ApiResponse<BranchDto>.Success(new BranchDto
+        {
+            Id = entity.Id,
+            TenantId = entity.TenantId,
+            Code = entity.Code,
+            Name = entity.Name,
+            Phone = entity.Phone,
+            Email = entity.Email,
+            Address = entity.Address,
+            City = entity.City,
+            State = entity.State,
+            IsActive = entity.IsActive
+        }, "Sucursal actualizada");
+    }
 }

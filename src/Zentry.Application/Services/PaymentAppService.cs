@@ -16,7 +16,7 @@ public class PaymentAppService : IPaymentAppService
     public async Task<ApiResponse<List<PaymentDto>>> ListAsync(CancellationToken cancellationToken = default)
     {
         var items = await _payments.ListAsync(cancellationToken);
-        return ApiResponse<List<PaymentDto>>.Success(items.Select(x => new PaymentDto { Id = x.Id, Amount = x.Amount, Method = x.PaymentMethod.ToString(), Status = x.Status, ReceivedAt = x.ReceivedAt }).ToList());
+        return ApiResponse<List<PaymentDto>>.Success(items.Select(x => new PaymentDto { Id = x.Id, BranchId = x.BranchId, InvoiceId = x.InvoiceId, AppointmentId = x.AppointmentId, CustomerId = x.CustomerId, Amount = x.Amount, Method = x.PaymentMethod.ToString(), ReferenceCode = x.ReferenceCode, Status = x.Status, ReceivedAt = x.ReceivedAt, Notes = x.Notes }).ToList());
     }
 
     public async Task<ApiResponse<PaymentDto>> CreateAsync(CreatePaymentRequest request, CancellationToken cancellationToken = default)
@@ -26,6 +26,6 @@ public class PaymentAppService : IPaymentAppService
         var entity = new Payment { Id = Guid.NewGuid(), TenantId = _current.TenantId.Value, BranchId = request.BranchId, InvoiceId = request.InvoiceId, AppointmentId = request.AppointmentId, CustomerId = request.CustomerId, CashSessionId = request.CashSessionId, PaymentMethod = method, ReferenceCode = request.ReferenceCode, Amount = request.Amount, ReceivedAt = DateTime.UtcNow, Status = "PAID", Notes = request.Notes, CreatedByUserId = request.CreatedByUserId, CreatedAt = DateTime.UtcNow };
         await _payments.AddAsync(entity, cancellationToken);
         await _payments.SaveChangesAsync(cancellationToken);
-        return ApiResponse<PaymentDto>.Success(new PaymentDto { Id = entity.Id, Amount = entity.Amount, Method = entity.PaymentMethod.ToString(), Status = entity.Status, ReceivedAt = entity.ReceivedAt }, "Pago registrado");
+        return ApiResponse<PaymentDto>.Success(new PaymentDto { Id = entity.Id, BranchId = entity.BranchId, InvoiceId = entity.InvoiceId, AppointmentId = entity.AppointmentId, CustomerId = entity.CustomerId, Amount = entity.Amount, Method = entity.PaymentMethod.ToString(), ReferenceCode = entity.ReferenceCode, Status = entity.Status, ReceivedAt = entity.ReceivedAt, Notes = entity.Notes }, "Pago registrado");
     }
 }

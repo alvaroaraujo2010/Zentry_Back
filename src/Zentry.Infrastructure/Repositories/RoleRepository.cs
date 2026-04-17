@@ -22,6 +22,12 @@ public class RoleRepository : IRoleRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<Role?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Roles
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
     public async Task<Role?> GetByCodeAsync(Guid tenantId, string code, CancellationToken cancellationToken = default)
     {
         return await _context.Roles

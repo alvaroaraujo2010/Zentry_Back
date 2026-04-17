@@ -69,4 +69,42 @@ public class RoleAppService : IRoleAppService
             IsSystem = entity.IsSystem
         }, "Rol creado");
     }
+
+    public async Task<ApiResponse<RoleDto>> UpdateAsync(Guid id, UpdateRoleRequest request, CancellationToken cancellationToken = default)
+    {
+        var entity = await _roles.GetByIdAsync(id, cancellationToken);
+        if (entity is null)
+            return ApiResponse<RoleDto>.Fail("Rol no encontrado.");
+
+        if (entity.IsSystem)
+            return ApiResponse<RoleDto>.Fail("No se puede editar un rol de sistema.");
+
+        if (string.IsNullOrWhiteSpace(request.Code))
+            return ApiResponse<RoleDto>.Fail("El código es obligatorio.");
+
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return ApiResponse<RoleDto>.Fail("El nombre es obligatorio.");
+
+        var normalizedCode = request.Code.Trim().ToUpperInvariant();
+        var existing = await _roles.GetByCodeAsync(entity.TenantId, normalizedCode, cancellationToken);
+        if (existing is not null && existing.Id != entity.Id)
+            return ApiResponse<RoleDto>.Fail("Ya existe un rol con ese código.");
+
+        entity.Code = normalizedCode;
+        entity.Name = request.Name.Trim();
+        entity.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
+        entity.UpdatedAt = DateTime.UtcNow;
+
+        await _roles.SaveChangesAsync(cancellationToken);
+
+        return ApiResponse<RoleDto>.Success(new RoleDto
+        {
+            Id = entity.Id,
+            TenantId = entity.TenantId,
+            Code = entity.Code,
+            Name = entity.Name,
+            Description = entity.Description,
+            IsSystem = entity.IsSystem
+        }, "Rol actualizado");
+    }
 }

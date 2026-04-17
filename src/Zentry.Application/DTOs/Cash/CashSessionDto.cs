@@ -1,2 +1,2 @@
 namespace Zentry.Application.DTOs.Cash;
-public class CashSessionDto { public Guid Id { get; set; } public decimal OpeningAmount { get; set; } public string Status { get; set; } = "OPEN"; }
+public class CashSessionDto { public Guid Id { get; set; } public Guid BranchId { get; set; } public decimal OpeningAmount { get; set; } public decimal? ClosingAmount { get; set; } public decimal ExpectedAmount { get; set; } public decimal DifferenceAmount { get; set; } public string Status { get; set; } = "OPEN"; public string? Notes { get; set; } public DateTime OpenedAt { get; set; } public DateTime? ClosedAt { get; set; } }

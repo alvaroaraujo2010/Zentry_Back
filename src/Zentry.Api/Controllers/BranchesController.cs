@@ -28,4 +28,11 @@ public class BranchesController : ControllerBase
         var result = await _service.CreateAsync(request, cancellationToken);
         return result.Ok ? Ok(result) : BadRequest(result);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBranchRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _service.UpdateAsync(id, request, cancellationToken);
+        return result.Ok ? Ok(result) : BadRequest(result);
+    }
 }

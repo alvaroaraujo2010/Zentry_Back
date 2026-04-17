@@ -5,7 +5,7 @@ using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
 [ApiController]
-//[Authorize]
+[Authorize]
 [Route("api/payments")]
 public class PaymentsController : ControllerBase
 {

@@ -1,0 +1,2 @@
+namespace Zentry.Application.DTOs.Reminders;
+public class ReminderDto { public Guid Id { get; set; } public Guid AppointmentId { get; set; } public Guid CustomerId { get; set; } public string Channel { get; set; } = string.Empty; public string TemplateCode { get; set; } = string.Empty; public string? Phone { get; set; } public DateTime ScheduledFor { get; set; } public string Status { get; set; } = string.Empty; public int Attempts { get; set; } public string? LastError { get; set; } public DateTime? SentAt { get; set; } }

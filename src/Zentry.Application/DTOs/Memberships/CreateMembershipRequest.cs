@@ -1,2 +1,2 @@
 namespace Zentry.Application.DTOs.Memberships;
-public class CreateMembershipRequest { public Guid TenantId { get; set; } public string Name { get; set; } = ""; public decimal Price { get; set; } }
+public class CreateMembershipRequest { public Guid TenantId { get; set; } public Guid? BranchId { get; set; } public string? Code { get; set; } public string Name { get; set; } = ""; public string? Description { get; set; } public decimal Price { get; set; } public int BillingCycleDays { get; set; } = 30; public int? VisitsPerCycle { get; set; } public bool IsActive { get; set; } = true; }
