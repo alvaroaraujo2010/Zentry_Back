@@ -28,6 +28,21 @@ public class TenantRepository : ITenantRepository
             .FirstOrDefaultAsync(x => x.Code == code, cancellationToken);
     }
 
+    public async Task<Tenant?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Tenants
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<Tenant?> GetFirstActiveAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Tenants
+            .AsNoTracking()
+            .Where(x => x.IsActive)
+            .OrderBy(x => x.Name)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task AddAsync(Tenant entity, CancellationToken cancellationToken = default)
     {
         await _context.Tenants.AddAsync(entity, cancellationToken);

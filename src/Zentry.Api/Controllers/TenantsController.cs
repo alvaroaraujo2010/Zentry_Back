@@ -23,6 +23,20 @@ public class TenantsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("current-branding")]
+    public async Task<IActionResult> CurrentBranding(CancellationToken cancellationToken)
+    {
+        var result = await _service.GetCurrentBrandingAsync(cancellationToken);
+        return result.Ok ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPut("current-branding")]
+    public async Task<IActionResult> UpdateCurrentBranding([FromBody] UpdateTenantBrandingRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _service.UpdateCurrentBrandingAsync(request, cancellationToken);
+        return result.Ok ? Ok(result) : BadRequest(result);
+    }
+
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Create([FromBody] CreateTenantRequest request, CancellationToken cancellationToken)

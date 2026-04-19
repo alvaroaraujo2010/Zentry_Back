@@ -7,4 +7,7 @@ public interface ITenantAppService
 {
     Task<ApiResponse<List<TenantDto>>> ListAsync(CancellationToken cancellationToken = default);
     Task<ApiResponse<TenantDto>> CreateAsync(CreateTenantRequest request, CancellationToken cancellationToken = default);
+    Task<ApiResponse<TenantBrandingDto>> GetCurrentBrandingAsync(CancellationToken cancellationToken = default);
+    Task<ApiResponse<TenantBrandingDto>> UpdateCurrentBrandingAsync(UpdateTenantBrandingRequest request, CancellationToken cancellationToken = default);
+    Task<ApiResponse<TenantBrandingDto>> GetPublicBrandingAsync(string? code, CancellationToken cancellationToken = default);
 }
