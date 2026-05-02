@@ -9,13 +9,47 @@ namespace Zentry.Application.Services;
 public class CatalogServiceAppService : ICatalogServiceAppService
 {
     private readonly ICatalogServiceRepository _services;
+    private readonly ITenantRepository _tenants;
     private readonly ICurrentUserService _current;
-    public CatalogServiceAppService(ICatalogServiceRepository services, ICurrentUserService current) { _services = services; _current = current; }
+    public CatalogServiceAppService(ICatalogServiceRepository services, ITenantRepository tenants, ICurrentUserService current)
+    {
+        _services = services;
+        _tenants = tenants;
+        _current = current;
+    }
 
     public async Task<ApiResponse<List<CatalogServiceDto>>> ListAsync(CancellationToken cancellationToken = default)
     {
         var items = await _services.ListAsync(cancellationToken);
         return ApiResponse<List<CatalogServiceDto>>.Success(items.Select(x => new CatalogServiceDto { Id = x.Id, BranchId = x.BranchId, Code = x.Code, Name = x.Name, Description = x.Description, DurationMinutes = x.DurationMinutes, Price = x.Price, Category = x.Category, IsActive = x.IsActive }).ToList());
+    }
+
+    public async Task<ApiResponse<List<CatalogServiceDto>>> ListPublicAsync(string? tenantCode, CancellationToken cancellationToken = default)
+    {
+        Tenant? tenant = null;
+
+        if (!string.IsNullOrWhiteSpace(tenantCode))
+        {
+            tenant = await _tenants.GetByCodeAsync(tenantCode.Trim().ToUpperInvariant(), cancellationToken);
+        }
+
+        tenant ??= await _tenants.GetFirstActiveAsync(cancellationToken);
+        if (tenant is null)
+            return ApiResponse<List<CatalogServiceDto>>.Success([]);
+
+        var items = await _services.ListActiveByTenantAsync(tenant.Id, cancellationToken);
+        return ApiResponse<List<CatalogServiceDto>>.Success(items.Select(x => new CatalogServiceDto
+        {
+            Id = x.Id,
+            BranchId = x.BranchId,
+            Code = x.Code,
+            Name = x.Name,
+            Description = x.Description,
+            DurationMinutes = x.DurationMinutes,
+            Price = x.Price,
+            Category = x.Category,
+            IsActive = x.IsActive
+        }).ToList());
     }
 
     public async Task<ApiResponse<CatalogServiceDto>> CreateAsync(CreateCatalogServiceRequest request, CancellationToken cancellationToken = default)

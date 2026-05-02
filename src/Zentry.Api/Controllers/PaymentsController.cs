@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Payments;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
+
 [ApiController]
-[Authorize]
+[Authorize(Roles = RoleGroups.Finance)]
 [Route("api/payments")]
 public class PaymentsController : ControllerBase
 {
     private readonly IPaymentAppService _service;
-    public PaymentsController(IPaymentAppService service) { _service = service; }
+
+    public PaymentsController(IPaymentAppService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
     public async Task<IActionResult> List(CancellationToken cancellationToken) => Ok(await _service.ListAsync(cancellationToken));

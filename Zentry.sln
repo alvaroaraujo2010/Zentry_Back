@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -9,6 +9,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zentry.Domain", "src\Zentry.Domain\Zentry.Domain.csproj", "{33333333-3333-3333-3333-333333333333}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zentry.Infrastructure", "src\Zentry.Infrastructure\Zentry.Infrastructure.csproj", "{44444444-4444-4444-4444-444444444444}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{45D415BD-BE9E-4116-A25B-44295C5A4922}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zentry.Tests", "tests\Zentry.Tests\Zentry.Tests.csproj", "{3119AA15-9A23-4C3B-B43C-7790558F615E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,8 +36,15 @@ Global
 		{44444444-4444-4444-4444-444444444444}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44444444-4444-4444-4444-444444444444}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44444444-4444-4444-4444-444444444444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3119AA15-9A23-4C3B-B43C-7790558F615E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3119AA15-9A23-4C3B-B43C-7790558F615E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3119AA15-9A23-4C3B-B43C-7790558F615E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3119AA15-9A23-4C3B-B43C-7790558F615E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3119AA15-9A23-4C3B-B43C-7790558F615E} = {45D415BD-BE9E-4116-A25B-44295C5A4922}
 	EndGlobalSection
 EndGlobal

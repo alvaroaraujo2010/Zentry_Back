@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Cash;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = RoleGroups.Finance)]
 [Route("api/cash")]
 public class CashController : ControllerBase
 {

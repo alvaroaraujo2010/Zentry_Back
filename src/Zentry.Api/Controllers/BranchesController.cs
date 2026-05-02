@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Branches;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = RoleGroups.TenantUsers)]
 [Route("api/branches")]
 public class BranchesController : ControllerBase
 {
@@ -23,6 +26,7 @@ public class BranchesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> Create([FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.CreateAsync(request, cancellationToken);
@@ -30,6 +34,7 @@ public class BranchesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBranchRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.UpdateAsync(id, request, cancellationToken);

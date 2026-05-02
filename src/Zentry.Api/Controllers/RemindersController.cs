@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Reminders;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = RoleGroups.Operational)]
 [Route("api/reminders")]
 public class RemindersController : ControllerBase
 {

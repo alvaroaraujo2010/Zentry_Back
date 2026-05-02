@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Users;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = RoleGroups.Management)]
 [Route("api/users")]
 public class UsersController : ControllerBase
 {

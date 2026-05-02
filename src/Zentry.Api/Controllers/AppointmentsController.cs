@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Appointments;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
+
 [ApiController]
-[Authorize]
+[Authorize(Roles = RoleGroups.TenantUsers)]
 [Route("api/appointments")]
 public class AppointmentsController : ControllerBase
 {
     private readonly IAppointmentAppService _service;
-    public AppointmentsController(IAppointmentAppService service) { _service = service; }
+
+    public AppointmentsController(IAppointmentAppService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
     public async Task<IActionResult> List(CancellationToken cancellationToken) => Ok(await _service.ListAsync(cancellationToken));

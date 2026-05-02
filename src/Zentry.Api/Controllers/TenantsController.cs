@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Tenants;
 using Zentry.Application.Services;
 
@@ -17,6 +18,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> List(CancellationToken cancellationToken)
     {
         var result = await _service.ListAsync(cancellationToken);
@@ -24,6 +26,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpGet("current-branding")]
+    [Authorize(Roles = RoleGroups.TenantUsers)]
     public async Task<IActionResult> CurrentBranding(CancellationToken cancellationToken)
     {
         var result = await _service.GetCurrentBrandingAsync(cancellationToken);
@@ -31,6 +34,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpPut("current-branding")]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> UpdateCurrentBranding([FromBody] UpdateTenantBrandingRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.UpdateCurrentBrandingAsync(request, cancellationToken);

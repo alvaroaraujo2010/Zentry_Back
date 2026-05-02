@@ -1,21 +1,28 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Services;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
+
 [ApiController]
-[Authorize]
+[Authorize(Roles = RoleGroups.TenantUsers)]
 [Route("api/catalog-services")]
 public class CatalogServicesController : ControllerBase
 {
     private readonly ICatalogServiceAppService _service;
-    public CatalogServicesController(ICatalogServiceAppService service) { _service = service; }
+
+    public CatalogServicesController(ICatalogServiceAppService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
     public async Task<IActionResult> List(CancellationToken cancellationToken) => Ok(await _service.ListAsync(cancellationToken));
 
     [HttpPost]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> Create([FromBody] CreateCatalogServiceRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.CreateAsync(request, cancellationToken);
@@ -23,6 +30,7 @@ public class CatalogServicesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = RoleGroups.Management)]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCatalogServiceRequest request, CancellationToken cancellationToken)
     {
         var result = await _service.UpdateAsync(id, request, cancellationToken);

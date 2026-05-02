@@ -1,16 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Zentry.Api.Security;
 using Zentry.Application.DTOs.Customers;
 using Zentry.Application.Services;
 
 namespace Zentry.Api.Controllers;
+
 [ApiController]
-[Authorize]
+[Authorize(Roles = RoleGroups.TenantUsers)]
 [Route("api/customers")]
 public class CustomersController : ControllerBase
 {
     private readonly ICustomerAppService _service;
-    public CustomersController(ICustomerAppService service) { _service = service; }
+
+    public CustomersController(ICustomerAppService service)
+    {
+        _service = service;
+    }
 
     [HttpGet]
     public async Task<IActionResult> List(CancellationToken cancellationToken) => Ok(await _service.ListAsync(cancellationToken));
